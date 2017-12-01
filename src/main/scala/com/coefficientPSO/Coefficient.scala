@@ -3,6 +3,10 @@ package com.coefficientPSO
 import java.io._
 import java.time
 import scala.collection.parallel.mutable.ParArray
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.rdd.RDD
+
+import scala.util.Random
 
 /**
   * Created by Dabney on 4/20/2017.
@@ -249,8 +253,10 @@ object Coefficient{
     //changeTestData(List(Array(0, 0, 0, 0, 0, 2, 0, 0, 0, 0)), 300)
     //changeTestData(List(Array(0, 0, 0, 0, 1, 0, 0, 0, 1, 2)), 300)
     //changeTestData(List(Array(1,1,0,1,0,0,1,0,0,0)), 300)
+
     readData()
     findBestCov(4)
+
     /*
     readData()
     var sum = 0d
