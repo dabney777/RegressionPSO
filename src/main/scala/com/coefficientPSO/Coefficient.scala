@@ -193,7 +193,7 @@ object Coefficient{
     }
   }
 
-  def findBestCov(maxPower:Int) = {
+  def findBestCov(sc:SparkContext, maxPower:Int) = {
     val t0 = System.currentTimeMillis()
     val numberOfParticles = 700
     val particles = new ParArray[Particle](numberOfParticles)
@@ -245,6 +245,9 @@ object Coefficient{
   }
 
   def main(args:Array[String]) = {
+    val conf = new SparkConf().setAppName("Coefficient Caculactor")
+    val sc = new SparkContext(conf)
+
     //changeTestData(List(Array(2, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0)), 300)
     //changeTestData(List(Array(0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0)), 300)
     //changeTestData(List(Array(0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0)), 300)
@@ -255,7 +258,7 @@ object Coefficient{
     //changeTestData(List(Array(1,1,0,1,0,0,1,0,0,0)), 300)
 
     readData()
-    findBestCov(4)
+    findBestCov(sc, 4)
 
     /*
     readData()
