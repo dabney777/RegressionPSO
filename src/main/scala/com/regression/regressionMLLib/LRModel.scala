@@ -30,12 +30,14 @@ object LRModel{
       LabeledPoint(categorize(parts(4)).toDouble, Vectors.dense(data.toArray))
     }.cache()
 
-    
+    val numIterations = 1000000
+    val stepSize = 0.00000001
+    val model = LinearRegressionWithSGD.train(parsedData, numIterations, stepSize)
 
 
     val valuesAndPreds = parsedData.map{ point =>
       val prediction = model.predict(point.features)
-      (point.label, 1.0)
+      (point.label, prediction)
     }
 
     val MSE = valuesAndPreds.map{ case(v, p) => math.pow((v-p), 2)}.sum()
