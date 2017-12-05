@@ -52,7 +52,7 @@ object BSDDemo{
     readData()
     var duration = 0
     for (i <- 0 until 3000){ //迭代次数  - until: not including end
-      for( temp <- 0 until 15){
+      for(temp <- 0 until 15){
         var error = 0.0 //第j个样本的预测误差：  labelMatrix(j) - h(j)
         var j = i % numberOfInstances
         var h_j = 0.0  //第j个样本的预测值：h(j)
