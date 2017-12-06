@@ -46,7 +46,7 @@ object LRModel{
 
     val metrics = new MulticlassMetrics(predictionAndLabels)
     val accuracy = metrics.accuracy
-    val recall = metrics.recall()
+    val recall = metrics.recall(1)
     println(s"Accuracy = $accuracy\nRecall = $recall")
   }
 
