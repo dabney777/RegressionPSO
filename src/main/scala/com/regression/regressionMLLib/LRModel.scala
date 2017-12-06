@@ -2,7 +2,10 @@ package com.regression.regressionMLLib
 
 import java.io.File
 import breeze.optimize.LBFGS
+import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.regression.LinearRegression
+import org.apache.spark.mllib.classification.LogisticRegressionWithLBFGS
+import org.apache.spark.mllib.evaluation.MulticlassMetrics
 import org.apache.spark.mllib.regression.{LinearRegressionWithSGD, LabeledPoint}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.{SparkContext, SparkConf}
@@ -21,32 +24,32 @@ object LRModel{
     val lrModel = new LRModel()
     val conf = new SparkConf setAppName("MLlibRegression") setMaster("local")
     val sc = new SparkContext(conf)
-    val data = sc.textFile(lrModel.irisPath)
+    val rawData = sc.textFile(lrModel.irisPath).cache()
 
-    val parsedData = data.map { line =>
-      val parts = line.split(',').toList
-      val data = parts.slice(0, 4).map(_.toDouble)
-      val v = Vectors.dense(data.toArray)
-      LabeledPoint(categorize(parts(4)).toDouble, Vectors.dense(data.toArray))
-    }.cache()
+    val data = rawData.map{line =>
+      val rawFeatures = line.split(",")
+      val label = categorize(rawFeatures(4))
+      val v = rawFeatures.slice(0, 4).map{_.toDouble}
+      LabeledPoint(label, Vectors.dense(v))
+    }
+    val splits = data.randomSplit(Array(0.7, 0.3), seed = 1L)
+    val training = splits(0).cache()
+    val test = splits(1)
 
-    val numIterations = 1000000
-    val stepSize = 0.00000001
-    val model = LinearRegressionWithSGD.train(parsedData, numIterations, stepSize)
+    //Run training algorithm to build the model
+    val model = new LogisticRegressionWithLBFGS().setNumClasses(4).run(training)
 
-
-    val valuesAndPreds = parsedData.map{ point =>
-      val prediction = model.predict(point.features)
-      (point.label, prediction)
+    val predictionAndLabels = test.map {case LabeledPoint(label, features) =>
+      val prediction = model.predict(features)
+      (prediction, label)
     }
 
-    val MSE = valuesAndPreds.map{ case(v, p) => math.pow((v-p), 2)}.sum()
-    println("training MSE = " + MSE)
-
-
-
-
+    val metrics = new MulticlassMetrics(predictionAndLabels)
+    val accuracy = metrics.accuracy
+    val recall = metrics.recall()
+    println(s"Accuracy = $accuracy\nRecall = $recall")
   }
+
 
   def categorize(s: String):Int = {
     if(s.equals("Iris-setosa")) return 1
