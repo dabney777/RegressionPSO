@@ -30,17 +30,21 @@ object LRModel{
       LabeledPoint(categorize(parts(4)).toDouble, Vectors.dense(data.toArray))
     }.cache()
 
+    val splits = parsedData.randomSplit(Array(0.7, 0.3), seed = 1L)
+    val training = splits(0).cache()
+    val test = splits(1)
+
     val numIterations = 1000000
     val stepSize = 0.00000001
-    val model = LinearRegressionWithSGD.train(parsedData, numIterations, stepSize)
+    val model = LinearRegressionWithSGD.train(training, numIterations, stepSize)
 
 
-    val valuesAndPreds = parsedData.map{ point =>
+    val valuesAndPreds = test.map{ point =>
       val prediction = model.predict(point.features)
       (point.label, prediction)
     }
 
-    val MSE = valuesAndPreds.map{ case(v, p) => math.pow((v-p), 2)}.sum()
+    val MSE = valuesAndPreds.map{ case(v, p) => math.pow((v-p), 2)}.mean()
     println("training MSE = " + MSE)
 
 
