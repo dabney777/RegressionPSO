@@ -99,7 +99,7 @@ object BSDDemo{
           return Unit
         }
       }
-      println("loss->>>>" + loss + " ,i>>>>>" + i + "\n")
+      println("loss->>>>" + loss + " ,i->>>>>" + i + "\n")
     }
   }
   }

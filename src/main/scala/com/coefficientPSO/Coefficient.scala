@@ -24,7 +24,7 @@ object Coefficient{
   var X = List[Array[Double]]()
   val rawDataDimensions = 900
 
-  //read RAWdata and put input in X output in Y
+  //read RAWdata and put input in X label in Y
   def readData()={
     val pathIris = ".\\src\\main\\resources\\iris.data"
     val pathLetters = ".\\src\\main\\resources\\letter-recognition.data"
