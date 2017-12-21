@@ -37,6 +37,7 @@ object BSDDemo{
 
     numberOfInstances = Coefficient.numberOfInstances
     dimensions = Coefficient.X(0).length
+    dimensions = 900
 
     featuresMatrix = List[List[Double]]()
     for(i <- Coefficient.X){
@@ -51,7 +52,7 @@ object BSDDemo{
   def findCoefficientInBSD():Unit={
     readData()
     var duration = 0
-    for (i <- 0 until 3000){ //迭代次数  - until: not including end
+    for (i <- 0 until 500){ //迭代次数  - until: not including end
       for(temp <- 0 until 15){
         var error = 0.0 //第j个样本的预测误差：  labelMatrix(j) - h(j)
         var j = i % numberOfInstances
@@ -93,13 +94,15 @@ object BSDDemo{
       loss = SumLoss / dimensions
       var change = oldloss - loss
       if(change<0)  change = -change
-      if(change < 0.005 * loss){
+      if(change < 0.0005 * loss){
         duration += 1
         if(duration > 100){
           return Unit
         }
       }
-      println("loss->>>>" + loss + " ,i->>>>>" + i + "\n")
+      if(true){
+        print("loss->>>>" + loss * 3800 * 500 + "\tdimensions->>>>" + dimensions + "\t ,i->>>>>" + i + "\n")
+      }
     }
   }
   }

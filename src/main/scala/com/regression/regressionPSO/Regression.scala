@@ -24,7 +24,7 @@ object  Regression{
 
     val a = new Array[Double](n)
     for(i <- 0 until n){
-      a(i) = rand.nextDouble()*2 -1
+      a(i) = rand.nextDouble()*2 - 1
     }
     a
   }

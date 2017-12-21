@@ -35,7 +35,7 @@ object Coefficient{
     val f = new File(features_test)
     val r = new RandomAccessFile(f,"r")
     // val r = new BufferedReader(new InputStreamReader(new FileInputStream(f), "utf-8"))
-    val gap = 10
+    val gap = 5
     val t_read_start = System.currentTimeMillis()
     for(i <- 0 until numberOfInstances){
       if(i % 3800 == 0){print(" finishing " + i + "\n")}
