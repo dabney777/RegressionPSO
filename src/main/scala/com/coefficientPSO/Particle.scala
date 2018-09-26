@@ -66,7 +66,15 @@ class Particle(val myPowerCoefficient:Array[Int],
         return Unit
       speed = (powerCoefficient(minuend) * Random.nextDouble()).toInt
     }
+    //perturbation
+    if (powerCoefficient(minuend) <= 0){
+        powerCoefficient(minued) = powerCoeffcient((int)Random.nextDouble() * powerCoefficient.length)
+    }
+    if (speed <0){
+    speed = -1 * speed
+    }
     if(speed == 0 ) speed = 1
+    if(
     powerCoefficient(minuend) = powerCoefficient(minuend) - speed
     for(i <- 0 until speed){
       temp = (Random.nextDouble() * powerCoefficient.length).toInt
